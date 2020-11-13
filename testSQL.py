@@ -16,9 +16,9 @@ import pyodbc
 
 import pandas.io.sql as psql
 
-cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=mengkome.mysql.pythonanywhere-services.com;DATABASE=mengkome$roslimainone;UID=mengkome;PWD=qwerty123456')
+cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=XXXX-mysql-domainname.com;DATABASE=USER_NAME$TABLE;UID=USER_ID;PWD=PASSWORD')
 cursor = cnxn.cursor()
-sql = ("""select * from rosli1""")
+sql = ("""select * from table1""")
 
 df = psql.frame_query(sql, cnxn)
 cnxn.close()
