@@ -18,23 +18,9 @@ Ranks are used to indicate progression and difficulty. Code Warriors complete Ka
 
 Why the names Kyu and Dan? The terms are borrowed from a system in Japanese martial arts, which is in turn borrowed from the game of Go. Kyu (or Kyū) indicates the number of degrees away from master level (Dan). This is why they count downward. Once you reach master level, we count upward. Black belts in martial arts are Dan level.
 
-Rank table
-
-|  Achieving rank progress         | Honor | Description  |
-| :---------------------------- | ----: | :---------------------- |
-| Reached 4 dan                 |  3600 | you have reached 4dan (master)! |
-| Reached 3 dan                 |  1800 | you have reached 3dan (master)! |
-| Reached 2 dan                 |   900 | you have reached 2dan (master)! |
-| Reached 1 dan                 |   450 | you have reached 1dan (master)! |
-| Reached 1 kyu                 |   225 | you have reached 1kyu (proficient)! |
-| Reached 2 kyu                 |   150 | you have reached 2kyu (proficient)! |
-| Reached 3 kyu                 |   100 | you have reached 3kyu (competent)! |
-| Reached 4 kyu                 |    70 | you have reached 4kyu (competent)! |
-| Reached 5 kyu                 |    45 | you have reached 5kyu (novice)! |
-| Reached 6 kyu                 |    30 | you have reached 6kyu (novice)! |
-| Reached 7 kyu                 |    20 | you have reached 7kyu (beginner)! |
-
 There is a score for the overall score as well as for each language that drive your overall rank and per-language rank respectively.  The table below shows the score required for you to reach each rank. You can see each rank is progressively harder to reach than the previous one.
+
+Rank table
 
 |       User Rank       | Required Score  |
 | :-------------------- | -----: |
@@ -58,3 +44,17 @@ You earn honor when you accomplish certain goals on Codewars.
 | Completed Kata (Blue)         |    32 | completion of a "competent" level kata (4kyu and 3kyu) |
 | Completed Kata (Yellow)       |     8 | completion of a "novice" level kata (6kyu and 5kyu) |
 | Completed Kata (White)        |     2 | completion of a "beginner" level kata (8kyu and 7kyu) |
+
+|  Achieving rank progress         | Honor | Description  |
+| :---------------------------- | ----: | :---------------------- |
+| Reached 4 dan                 |  3600 | you have reached 4dan (master)! |
+| Reached 3 dan                 |  1800 | you have reached 3dan (master)! |
+| Reached 2 dan                 |   900 | you have reached 2dan (master)! |
+| Reached 1 dan                 |   450 | you have reached 1dan (master)! |
+| Reached 1 kyu                 |   225 | you have reached 1kyu (proficient)! |
+| Reached 2 kyu                 |   150 | you have reached 2kyu (proficient)! |
+| Reached 3 kyu                 |   100 | you have reached 3kyu (competent)! |
+| Reached 4 kyu                 |    70 | you have reached 4kyu (competent)! |
+| Reached 5 kyu                 |    45 | you have reached 5kyu (novice)! |
+| Reached 6 kyu                 |    30 | you have reached 6kyu (novice)! |
+| Reached 7 kyu                 |    20 | you have reached 7kyu (beginner)! |
