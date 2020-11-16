@@ -1,17 +1,18 @@
 def valid_solution(array):
     size = len(array)
     if len(array[0]) == size and len(array[-1]) == size and size == 9:
-        result = 1
         for i in range(size):
             column = [array[x][i] for x in range(size)]
             for k in range(1, size + 1):
                 if k not in array[i]:
-                    result = result * 0
+                    return False
                 elif k not in column:
-                    result = result * 0
-            if sorted(column) == column:
-                result = result * 0
-        return result == 1
+                    return False
+            if sorted(array[i]) == array[i]:
+                return False
+            elif sorted(column) == column:
+                return False
+        return True
     else:
         return False
 
