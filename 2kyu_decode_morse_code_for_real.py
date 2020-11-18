@@ -42,63 +42,68 @@ CODE_MORSE = {v:k for k,v in MORSE_CODE.items()}
 
 ####### MY CODE / SOLUTIONS
 
-def onezerofirst(bits):
-    bits = bits.strip('0')
-    onefirst = bits.replace('0','#')
-    zerofirst = ''
-    if '#' in onefirst:
-        if '#1' in onefirst:
-            zerofirst = onefirst.split('#1')[0] + '#'
-            if '1#' in zerofirst:
-                zerofirst = (zerofirst.split('1#')[1] + '0').replace('#','0')
-            else:
-                zerofirst = zerofirst.replace('#', '0')
-        else:
-            zerofirst = onefirst.replace('1','').replace('#','0')
-        onefirst = (onefirst.split('1#')[0] + '1').replace('#','')
-    return onefirst, zerofirst
-
-def ratiotouse(bits):
-    bits = bits.strip('0')
-    onezero = [i + 1 for i in range(len(bits) - 1) if bits[i] + bits[i + 1] == '10']
-    zeroone = [i + 1 for i in range(len(bits) - 1) if bits[i] + bits[i + 1] == '01']
-    onefirst = onezerofirst(bits)[0]
-    zerofirst = onezerofirst(bits)[1]
-    if len(bits) > 1:
-        ratiolist = []
-        if len(onezero) == len(zeroone) and len(onezero) >= 1 and len(zerofirst) <= len(onefirst) and len(zerofirst) > 0:
-            if zeroone[0] > onezero[0]:
-                ratiolist = [(zeroone[i] - onezero[i]) for i in range(len(onezero))]
-            elif zeroone[0] < onezero[0]:
-                ratiolist = [(onezero[i] - zeroone[i]) for i in range(len(onezero))]
-            ratio = sorted(ratiolist)[0]
-        elif len(zerofirst) == 0:
-            ratio = len(onefirst)
-        elif len(onefirst) < len(zerofirst):
-            ratio = len(onefirst)
-        else:
-            ratio = 1
-    else:
-        ratio = 1
-    return ratio
-
 def decode_bits(bits):
-    ratio = ratiotouse(bits)
-    newbits = ''
-    for i in range(0, len(bits), ratio):
-        newbits = newbits + bits[i]
-    dots = newbits.replace('1'*3, '-').replace('1', '.').replace('0'*3, ' ').replace('0', '')
-    return dots
+    print(bits)
+    bits = bits.strip('0')
+    print(bits)
+    if len(bits) > 1:
+        onezero = [i + 1 for i in range(len(bits) - 1) if bits[i] + bits[i + 1] == '10']
+        zeroone = [i + 1 for i in range(len(bits) - 1) if bits[i] + bits[i + 1] == '01']
+        if onezero != []:
+            print('onezero = ', onezero)
+            print('zeroone = ', zeroone)
+            onezero_org = onezero + [len(bits)]
+            zeroone_org = [0] + zeroone
+            oneloccount = {zeroone_org[i]: onezero_org[i] - zeroone_org[i] for i in range(len(zeroone_org))}
+            zeroloccount = {onezero[i]: zeroone[i] - onezero[i] for i in range(len(onezero))}
+            print('oneloccount = ', oneloccount)
+            print('zeroloccount = ', zeroloccount)
+            divideone = sorted(oneloccount.values())[-1] / 2
+            dividezero = sorted(zeroloccount.values())[-1] / 3
+            dots = ''
+            for i in range(len(bits)):
+                if i in oneloccount.keys():
+                    if oneloccount[i] > divideone and oneloccount[i] >= 3:
+                        dots = dots + '-'
+                    else:
+                        dots = dots + '.'
+                elif i in zeroloccount.keys():
+                    if zeroloccount[i] > 2 * dividezero and zeroloccount[i] >= 3:
+                        dots = dots + '  '
+                    elif dividezero < zeroloccount[i] <= 2 * dividezero:
+                        dots = dots + ' '
+                    else:
+                        dots = dots + ''
+            return dots
+        else:
+            return '.'
+    elif len(bits) == 1 and bits == '':
+        return ''
+    else:
+        return bits.replace('1', '.').replace('0', '')
 
 def decode_morse(morse_code):
-    morse_code = morse_code.strip()
-    text = ''
-    for x in morse_code.split(' '):
-        if x != '':
-            text = text + MORSE_CODE[x]
-        else:
-            text = text + ' '
-    return text.replace('  ', ' ')
+    if morse_code != ' ' and morse_code != '':
+        morse_code = morse_code.strip()
+        text = ''
+        for x in morse_code.split(' '):
+            if x != '':
+                text = text + MORSE_CODE[x]
+            else:
+                text = text + ' '
+        return text.replace('  ', ' ')
+    else:
+        return ''
+
+def encode_morse(sentences):
+    sentences = sentences.strip()
+    bits = ''
+    for word in sentences.split(' '):
+        for char in word:
+            bits = bits + CODE_MORSE[char.upper()]
+            bits = bits + ' '
+        bits = bits + ' '
+    return bits
 
 ########### TDD
 
@@ -112,7 +117,7 @@ class Test:
             expecteddots = ''
             for c in expected:
                 expecteddots = expecteddots + ' ' + CODE_MORSE[c]
-            print("Got = {}, Expected = {}".format(value, expected), ' -- > ', expecteddots)
+            print("Got = {} / len = {} , Expected = {} / len = {}".format(value, len(value), expected, len(expected)), ' -- > ', expecteddots)
             print('UNEQUAL!! --> v =', value, " !=  x =", expected)
 
     @classmethod
@@ -147,10 +152,44 @@ exp15 = 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.'
 bit16 = '11111111111111100000000000000011111000001111100000111110000011111000000000000000111110000000000000000000000000000000000011111111111111100000111111111111111000001111100000111111111111111000000000000000111110000011111000001111111111111110000000000000001111100000111110000000000000001111111111111110000011111000001111111111111110000011111000000000000000111111111111111000001111100000111111111111111000000000000000000000000000000000001111111111111110000011111000001111100000111110000000000000001111100000111111111111111000001111100000000000000011111111111111100000111111111111111000001111111111111110000000000000001111100000111111111111111000001111111111111110000000000000001111111111111110000011111000000000000000000000000000000000001111100000111110000011111111111111100000111110000000000000001111111111111110000011111111111111100000111111111111111000000000000000111111111111111000001111100000111110000011111111111111100000000000000000000000000000000000111110000011111111111111100000111111111111111000001111111111111110000000000000001111100000111110000011111111111111100000000000000011111111111111100000111111111111111000000000000000111110000011111111111111100000111111111111111000001111100000000000000011111000001111100000111110000000000000000000000000000000000011111111111111100000111111111111111000001111111111111110000000000000001111100000111110000011111000001111111111111110000000000000001111100000000000000011111000001111111111111110000011111000000000000000000000000000000000001111111111111110000000000000001111100000111110000011111000001111100000000000000011111000000000000000000000000000000000001111100000111111111111111000001111100000111110000000000000001111100000111111111111111000000000000000111111111111111000001111111111111110000011111000001111100000000000000011111111111111100000111110000011111111111111100000111111111111111000000000000000000000000000000000001111111111111110000011111000001111100000000000000011111111111111100000111111111111111000001111111111111110000000000000001111111111111110000011111111111111100000111110000000000000001111100000111111111111111000001111100000111111111111111000001111100000111111111111111'
 exp16 = 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.'
 
-############# TESTING
+# ############# TESTING
+#
+# inputlist = [bit1, bit2, bit3, bit4, bit5, bit6, bit7, bit8, bit9, bit10, bit11, bit12, bit13, bit14, bit15, bit16]
+# expctlist = [exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, exp9, exp10, exp11, exp12, exp13, exp14, exp15, exp16]
+#
+# for i in range(len(inputlist)):
+#     print(i+1, ') ', end='')
+#     Test.assert_equals(decode_morse(decode_bits(inputlist[i])), expctlist[i])
 
-inputlist = [bit1, bit2, bit3, bit4, bit5, bit6, bit7, bit8, bit9, bit10, bit11, bit12, bit13, bit14, bit15, bit16]
-expctlist = [exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, exp9, exp10, exp11, exp12, exp13, exp14, exp15, exp16]
+bit17 = '0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000'
+exp17 = 'HEY JUDE'
+
+bit18 = '0'
+exp18 = ''
+
+bit19 = '000000000000000000000000000000000000000000'
+exp19 = ''
+
+bit20 = '1001'; exp20 = 'EE'
+bit21 = '100001'; exp21 = 'EE'
+bit22 = '10000001'; exp22 = 'E E'
+bit23 = '10000000001'; exp23 = 'E E'
+
+bit24 = '00000000000111111100000011010001110111000000001110000000000000000001111111011111100001101111100000111100111100011111100000001011100000011111110010001111100110000011111100101111100000000000000111111100001111010110000011000111110010000011111110001111110011111110000010001111110001111111100000001111111101110000000000000010110000111111110111100000111110111110011111110000000011111001011011111000000000000111011111011111011111000000010001001111100000111110111111110000001110011111100011111010000001100001001000000000000000000111111110011111011111100000010001001000011111000000100000000101111101000000000000011111100000011110100001001100000000001110000000000000001101111101111000100000100001111111110000000001111110011111100011101100000111111000011011111000111111000000000000000001111110000100110000011111101111111011111111100000001111110001111100001000000000000000000000000000000000000000000000000000000000000'
+exp24 = 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG'
+
+# input1 = bit24
+# expect1 = exp24
+# # input1 = bit13
+# # expect1 = exp13
+# print(input1)
+# print('dots = ', decode_bits(input1))
+# Test.assert_equals(decode_morse(decode_bits(input1)), expect1)
+# print('expect = ', expect1)
+# print('exp dots = ', encode_morse(expect1))
+
+inputlist = [bit1, bit2, bit3, bit4, bit5, bit6, bit7, bit8, bit9, bit10, bit11, bit12, bit13, bit14, bit15, bit16, bit17, bit18, bit19, bit20, bit21, bit22, bit23, bit24]
+expctlist = [exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, exp9, exp10, exp11, exp12, exp13, exp14, exp15, exp16, exp17, exp18, exp19, exp20, exp21, exp22, exp23, exp24]
 
 for i in range(len(inputlist)):
     print(i+1, ') ', end='')

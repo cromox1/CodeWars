@@ -43,3 +43,4 @@ Test.assert_equals(decodeMorse('   .   .  '), 'E E')
 Test.assert_equals(decodeMorse('       ...---... -.-.--   - .... .   --.- ..- .. -.-. -.-   -... .-. --- .-- -.   ..-. --- -..-   .--- ..- -- .--. ...   --- ...- . .-.   - .... .   .-.. .- --.. -.--   -.. --- --. .-.-.-   '), 'SOS! THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.')
 
 Test.describe("Your own tests")
+Test.assert_equals(decodeMorse(' .-. '), 'E')
